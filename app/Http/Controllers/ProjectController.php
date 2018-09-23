@@ -47,12 +47,19 @@ class ProjectController extends Controller
             foreach($request->file('name') as $image)
             {
                 $name = $image->getClientOriginalName();
-                $image->move(public_path().'/images/' .$project_id, $name);  
-                $photo = new Photo();
-                $photo->name = ($name);
-                $photo->path = public_path().'/images/' .$project_id;
-                $photo->project_id = $project_id;
-                $photo->save();
+
+                $count = Photo::where('name', $name)->count();
+                if($count < 1){
+                    $image->move(public_path().'/images/' .$project_id, $name);  
+                    $photo = new Photo();
+                    $photo->name = ($name);
+                    $photo->path = public_path().'/images/' .$project_id;
+                    $photo->project_id = $project_id;
+                    $photo->save();
+
+                }
+
+                
             }
          }
 
